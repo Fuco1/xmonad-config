@@ -1,0 +1,24 @@
+-- Hey emacs, this is -*- haskell -*- file!
+Config { font = "xft:Monospace-8:narrow"
+       , lowerOnStart = False
+       , bgColor = "black"
+       , fgColor = "#888a85"
+       , position = Top
+       , commands = [ Run Weather "LKTB" ["-t","<tempC>","-L","64","-H","77",
+                                          "--normal","#8ae234","--high","#ef2929","--low","#8cc4ff"] 36000
+                    , Run MultiCpu ["-t", "<autototal>", "-p", "2", "-L","10","-H","50","--normal","#8ae234","--high","#ef2929"] 10
+                    , Run Memory ["-t","<usedratio>%","-p", "2"] 10
+                    , Run Date "%a%d%b%H:%M:%S" "date" 10
+                    , Run CoreTemp ["-t", "<core0>",
+                                    "-L", "40", "-H", "60",
+                                    "-l", "lightblue", "-n", "gray90", "-h", "red"] 20
+                    , Run CommandReader "/home/matus/bin/media-control" "mpris"
+                    , Run Com "/home/matus/bin/emacs-status" [] "emacs-status" 10
+                    , Run Com "/home/matus/bin/trayer-width-to-spaces" [] "trayer-width-to-spaces" 10
+                    , Run Battery ["-t", "<left>", "-c", "energy_full", "--", "-l", "red", "-m", "blue", "-h", "green"] 60
+                    , Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %mpris%│%battery%│%multicpu%,%coretemp%│%memory%│<fc=#ad7fa8>%date%</fc>│%emacs-status%│%LKTB%%trayer-width-to-spaces%"
+       }

@@ -1,0 +1,12 @@
+resolver: lts-7.19
+
+packages:
+  - .
+  - /home/matus/dev/haskell/xmonad
+  - /home/matus/dev/haskell/xmonad-contrib
+  - /home/matus/dev/haskell/mpris
+
+extra-deps:
+  - X11-1.8
+  - X11-xft-0.3.1
+  - xmonad-entryhelper-0.1.0.0
