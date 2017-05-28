@@ -2,7 +2,7 @@ import Control.Monad (when)
 import Data.Monoid (All(..))
 import Data.Foldable (forM_)
 import DBus.Mpris
-import System.Exit (exitSuccess)
+import System.Exit (exitSuccess, ExitCode(..))
 import System.IO (hPutStrLn)
 import System.IO.Strict as IOS (readFile)
 import XMonad
@@ -19,7 +19,12 @@ import XMonad.Prompt.Window (windowPromptGoto)
 import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
 import XMonad.Util.ExtensibleState as XS
 import XMonad.Util.Run (spawnPipe, runInTerm, safeSpawn)
-import XMonad.Util.EntryHelper (withHelper)
+import XMonad.Util.EntryHelper (withCustomHelper
+                             , compileUsingShell
+                             , Config(..)
+                             , isSourceNewer
+                             )
+import qualified XMonad.Util.EntryHelper.Config as HC (defaultConfig)
 import qualified XMonad.StackSet as W
 
 import qualified MyXMonad.Constants as C
@@ -64,7 +69,19 @@ propertyHook e = do
   return (All True)
 
 main :: IO ()
-main = withHelper xmonadMain
+main = withCustomHelper (HC.defaultConfig {
+                            run = xmonadMain
+                          , compile = stackCompile
+                          })
+
+stackCompile :: Bool -> IO ExitCode
+stackCompile force = do
+    b <- isSourceNewer
+    if force || b
+      then do
+        let cmd = "stack exec ghc -- --make xmonad.hs -fforce-recomp -o xmonad"
+        compileUsingShell cmd
+      else return ExitSuccess
 
 xmonadMain :: IO ()
 xmonadMain = do
