@@ -99,7 +99,7 @@ paChangeVolumeRunning delta = do
    Right s@(_:_) -> do
      let running = filter ((== Running) . state) s
      mapM_ (\x -> safeSpawn "pactl"
-                  ["set-sink-input-volume", show $ index x, "--", delta])
+                  ["set-sink-input-volume", show $ index x, delta])
        running
    _ -> return ()
 
@@ -118,9 +118,6 @@ number :: Parser Int
 number = do ds <- many1 digit
             return (read ds)
          <?> "number"
-
-welcome :: Parser String
-welcome = string "Welcome to PulseAudio! Use \"help\" for usage information.\n>>> "
 
 sinksAvailable :: Parser String
 sinksAvailable = string "sink input(s) available.\n"
@@ -151,7 +148,7 @@ sink = do
   index <- number
   manyTill anyChar (try (string "state: "))
   state <- sinkState
-  manyTill anyChar (try (string "volume: 0:"))
+  manyTill anyChar (try (string "volume: front-left: "))
   vol <- volume
   manyTill anyChar (try (string "muted: "))
   muted <- yesno
@@ -168,7 +165,6 @@ alsaPluginName = do
 
 sinkInput :: Parser [SinkInput]
 sinkInput = do
-  welcome
   nos <- numberOfSinks
   if nos == 0
     then return []
