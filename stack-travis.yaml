@@ -1,0 +1,18 @@
+resolver: lts-7.19
+
+packages:
+  - .
+  - location:
+      git: https://github.com/Fuco1/xmonad.git
+      commit: master
+  - location:
+      git: https://github.com/Fuco1/xmonad-contrib.git
+      commit: 2cf2bccff3589c8d1b39947221f3133cb48c7a72
+  - location:
+      git: https://github.com/Fuco1/mpris.git
+      commit: master
+
+extra-deps:
+  - X11-1.8
+  - X11-xft-0.3.1
+  - xmonad-entryhelper-0.1.0.0
