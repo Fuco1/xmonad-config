@@ -76,30 +76,21 @@ printer = def { ppCurrent         = xmobarColor "#fcaf3e" ""
 doKillWindow :: ManageHook
 doKillWindow = ask >>= \w -> liftX (killWindow w) >> doF (W.delete w)
 
-manageHook = (composeOne . concat $ --  <&&> resource =? "TeamViewer.exe"
-    [ [ (stringProperty "WM_NAME" =? "Computers & Contacts" <&&> resource =? "TeamViewer.exe") -?> doKillWindow
-      , isDialog -?> doFloat
-      , transience
-      , isFullscreen -?> doFullFloat
-      , resource =? "TeamViewer.exe" -?> doCenterFloat
-      , resource =? "arandr" -?> doCenterFloat
-      ]
-    , [ className =? c -?> doFloat | c <- myCFloats ]
-    , [ title     =? t -?> doFloat | t <- myTFloats ]
-    , [ resource  =? r -?> doFloat | r <- myRFloats ]
-    , [ className =? c -?> doIgnore | c <- myCIgnores ]
-    , [ title     =? t -?> doIgnore | t <- myTIgnores ]
-    , [ resource  =? r -?> doIgnore | r <- myRIgnores ]
-    , [ className =? r -?> doShift "0" | r <- [
-          "spotify", "alsamixer", "pacmixer", "ncmpcpp"
-          ]]
-    ])
-    <+> manageDocks
-    <+> XMonad.manageHook def
-    where
-        myCFloats = ["sun-awt-X11-XFramePeer", "net-sourceforge-jnlp-runtime-Boot", "Unity"]
-        myTFloats = ["GLFW-b-demo"]
-        myRFloats = []
-        myCIgnores = ["Xfce4-notifyd"]
-        myTIgnores = []
-        myRIgnores = []
+manageHook =
+  composeOne [
+      (stringProperty "WM_NAME" =? "Computers & Contacts" <&&> resource =? "TeamViewer.exe") -?> doKillWindow
+    , isDialog -?> doIgnore
+    , transience
+    , isFullscreen -?> doFullFloat
+    ] <+>
+  composeAll [
+      resource =? "TeamViewer.exe" --> doCenterFloat
+    , resource =? "arandr" --> doCenterFloat
+    , className =? "Unity" --> doFloat
+    , className =? "Xfce4-notifyd" --> doIgnore
+    , className =? "" --> doShift "0" -- this is for spotify
+    , resource =? "alsamixer" --> doShift "0"
+    , resource =? "ncmpcpp" --> doShift "0"
+    ]
+  <+> manageDocks
+  <+> XMonad.manageHook def
