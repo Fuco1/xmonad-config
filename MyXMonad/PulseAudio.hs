@@ -21,7 +21,7 @@ data PAPrompt = PAPrompt String
 instance XPrompt PAPrompt where
     showXPrompt (PAPrompt s) = s ++ ": "
 
-data SinkState = Running | Corked deriving (Show, Eq, Ord)
+data SinkState = Running | Corked | Drained deriving (Show, Eq, Ord)
 
 data SinkInput = SinkInput { index :: Int
                            , name :: String
@@ -140,7 +140,8 @@ volume = do
 
 sinkState :: Parser SinkState
 sinkState = (string "CORKED" >> return Corked) <|>
-            (string "RUNNING" >> return Running)
+            (string "RUNNING" >> return Running) <|>
+            (string "DRAINED" >> return Drained)
 
 sink :: Parser SinkInput
 sink = do
@@ -148,7 +149,10 @@ sink = do
   index <- number
   manyTill anyChar (try (string "state: "))
   state <- sinkState
-  manyTill anyChar (try (string "volume: front-left: "))
+  manyTill anyChar (try
+                    (string "volume: ") >>
+                    ((string "front-left: ") <|>
+                    (string "mono: ")))
   vol <- volume
   manyTill anyChar (try (string "muted: "))
   muted <- yesno
