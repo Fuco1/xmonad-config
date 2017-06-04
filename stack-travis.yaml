@@ -7,7 +7,7 @@ packages:
       commit: master
   - location:
       git: https://github.com/Fuco1/xmonad-contrib.git
-      commit: 2cf2bccff3589c8d1b39947221f3133cb48c7a72
+      commit: cd56478161704fdcab833c4012513593407338f6
   - location:
       git: https://github.com/Fuco1/mpris.git
       commit: master
