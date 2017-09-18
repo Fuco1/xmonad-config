@@ -72,7 +72,7 @@ main = do
               _ -> (2,0,1)
   let (S xmobarScreen) = case w of
                     "brno" -> right
-                    "home" -> left
+                    "home" -> middle
                     "logio" -> middle
                     _ -> middle
   xmproc <- spawnPipe $ "/home/matus/bin/xmobar -x " ++ show xmobarScreen ++ " /home/matus/.xmonad/xmobarrc"
