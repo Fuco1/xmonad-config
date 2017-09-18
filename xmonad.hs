@@ -145,6 +145,7 @@ main = do
            , ("<XF86AudioRaiseVolume>", paIncreaseVolumeRunning)
            , ("<XF86AudioLowerVolume>", paDecreaseVolumeRunning)
            , ("<XF86AudioMute>",        spawn "amixer -q -D pulse sset Master toggle")
+           , (leader <%> "r", spawn "emacs-capture org-protocol://capture://r/.")
            , (leader <%> "<Left>", decBrightness)
            , (leader <%> "<Right>", incBrightness)
            , (leader <%> "b", setBrightness)
