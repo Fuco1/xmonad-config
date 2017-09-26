@@ -172,6 +172,7 @@ main = do
                Just file <- myIdoFilePrompt "/home/matus/download/"
                safeSpawn "xdg-open" [file]
              )
+           , (leader <%> "]", password)
            , ("M2-<Backspace>", toggleWS)
            , ("M2-S-<Pause>", io exitSuccess)
            , ("M2-<Pause>", recompileXMonad)

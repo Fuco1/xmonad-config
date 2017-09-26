@@ -1,11 +1,13 @@
 module MyXMonad.Interactive where
 
 import Control.Applicative
+import Control.Monad (void)
 import Control.Monad.Trans.Maybe
 import Data.Maybe (fromMaybe)
 import XMonad
 import XMonad.Actions.WindowBringer
 import XMonad.Prompt
+import XMonad.Util.Run (runProcessWithInput, safeSpawn)
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 
@@ -40,7 +42,8 @@ prompts c s = spec $ mkXPromptWithReturn (InteractivePrompt s) (c { alwaysHighli
    emptyCompl _ = return []
 
 promptS :: XPConfig -> [String] -> String -> InteractiveSpecification String
-promptS c options s = spec $ mkXPromptWithReturn (InteractivePrompt s) c (mkComplFunFromList' options) return
+promptS c options s = spec $ mkXPromptWithReturn (InteractivePrompt s) c compl return
+  where compl choice = return $ filter (matchAllWords choice . strToLower) options
 
 promptw :: XPConfig -> String -> InteractiveSpecification Window
 promptw c s = spec $ do
@@ -83,3 +86,15 @@ mWindow w wi = windows (W.shiftWin wi w)
 iMWindow = interactive $ mWindow <$> promptw cf "Window to move: " <*> promptW cf "To workspace: "
 
 urxvtc = interactive $ (\x y -> spawn $ y ++ " -name " ++ x) <$> prompts cf "String: " <*> pure "urxvtc"
+
+getListOfPasswords :: X [String]
+getListOfPasswords = map (reverse . drop 4 . reverse) . words <$> runProcessWithInput "bash" ["-c", "cd ~/.password-store && ls **/*.gpg"] ""
+
+-- WARNING: prompt does not pick first narrowed choice as default, you have to expand it into the prompt with tab
+decryptPassword :: String -> X ()
+decryptPassword pass = spawn $ "pass show --clip " ++ pass
+
+password :: X ()
+password = do
+  listOfPasswords <- getListOfPasswords
+  interactive $ decryptPassword <$> promptS cf listOfPasswords "Password: "
