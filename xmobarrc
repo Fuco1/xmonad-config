@@ -12,9 +12,9 @@ Config { font = "xft:Monospace-8:narrow"
                     , Run CoreTemp ["-t", "<core0>",
                                     "-L", "40", "-H", "60",
                                     "-l", "lightblue", "-n", "gray90", "-h", "red"] 20
-                    , Run CommandReader "/home/matus/bin/media-control" "mpris"
-                    , Run Com "/home/matus/bin/emacs-status" [] "emacs-status" 10
-                    , Run Com "/home/matus/bin/trayer-width-to-spaces" [] "trayer-width-to-spaces" 10
+                    , Run CommandReader "/home/matus/.local/bin/media-control" "mpris"
+                    , Run Com "/home/matus/.local/bin/emacs-status" [] "emacs-status" 10
+                    , Run Com "/home/matus/.local/bin/trayer-width-to-spaces" [] "trayer-width-to-spaces" 10
                     , Run Battery ["-t", "<left>", "-c", "energy_full", "--", "-l", "red", "-m", "blue", "-h", "green"] 60
                     , Run StdinReader
                     ]

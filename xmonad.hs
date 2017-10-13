@@ -75,7 +75,7 @@ main = do
                     "home" -> middle
                     "logio" -> middle
                     _ -> middle
-  xmproc <- spawnPipe $ "/home/matus/bin/xmobar -x " ++ show xmobarScreen ++ " /home/matus/.xmonad/xmobarrc"
+  xmproc <- spawnPipe $ "/home/matus/.local/bin/xmobar -x " ++ show xmobarScreen ++ " /home/matus/.xmonad/xmobarrc"
   xmonad $
     (\c -> c { startupHook = do
                   root <- theRoot `fmap` ask
