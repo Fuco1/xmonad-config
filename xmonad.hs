@@ -123,6 +123,7 @@ main = do
            , ("<Home>" <%> "t",      Mpris.switch)
            , (leader <%> "s",        Mpris.stopCurrent)
            , (leader <%> "p",        Mpris.previousCurrent)
+           , ("<Home>" <%> "p",        Mpris.previousCurrent)
            , (leader <%> "<Backspace>", Mpris.stopCurrent >> Mpris.toggleCurrent)
            , (leader <%> "<Delete>",   Mpris.nextCurrent)
            , ("<Home>" <%> "<Delete>", Mpris.nextCurrent)
