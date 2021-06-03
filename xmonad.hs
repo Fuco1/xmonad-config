@@ -71,9 +71,9 @@ main = do
               "logio" -> (2,0,1)
               _ -> (2,0,1)
   let (S xmobarScreen) = case w of
-                    "brno" -> right
+                    "brno" -> middle
                     "home" -> middle
-                    "logio" -> middle
+                    "logio" -> right
                     _ -> middle
   xmproc <- spawnPipe $ "/home/matus/.local/bin/xmobar -x " ++ show xmobarScreen ++ " /home/matus/.xmonad/xmobarrc"
   xmonad $
@@ -202,10 +202,13 @@ main = do
            , ("M2-=", cycleRecentWindows [xK_Alt_R] xK_equal xK_minus)
            , ("M4-b", sendMessage ToggleStruts)
            , ("M4-S-b", broadcastMessage ToggleStruts >> refresh)
+           , ("M2-<Space>", sendMessage NextLayout)
            , (leader <%> "=" <%> "o", inotify)
            , (leader <%> "=" <%> "i", inotify2)
            , (leader <%> "=" <%> "u", urxvtc)
            , (leader <%> "=" <%> "m", iMWindow)
+           , (leader <%> "=" <%> ",", sendMessage (IncMasterN 1))
+           , (leader <%> "=" <%> ".", sendMessage (IncMasterN (-1)))
            -- TODO: pridat "hide all" a "show all"
            ] `additionalKeys`
            (
