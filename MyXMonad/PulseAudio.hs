@@ -69,7 +69,9 @@ setVolume sink = do
   volume <- mkXPromptWithReturn
               (PAPrompt $ "Volume [" ++ name sink ++ ", " ++ show (vol sink) ++ "%]")
               MyXMonad.Constants.prompt
-              (mkComplFunFromList $ map show [0..100])
+              (mkComplFunFromList
+                MyXMonad.Constants.prompt
+                (map show ([0..100] :: [Int])))
               return
   liftIO $ case volume of
     Just "" -> pacmdMute sink Toggle

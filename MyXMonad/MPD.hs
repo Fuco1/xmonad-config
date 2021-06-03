@@ -64,7 +64,8 @@ playGeneric getter prompt mpd action = runMaybeT $ do
 playDirectory :: Action -> X (Maybe ())
 playDirectory action = runMaybeT $ do
   dir <- MaybeT $ listDirectorySongs ""
-  recursive <- MaybeT $ mkXPromptWithReturn (MPDPrompt "Recursive? ") MyXMonad.Constants.prompt (mkComplFunFromList' ["recursive", "non-recursive"]) return
+  recursive <- let c = MyXMonad.Constants.prompt in
+    MaybeT $ mkXPromptWithReturn (MPDPrompt "Recursive? ") c (mkComplFunFromList' c ["recursive", "non-recursive"]) return
   let r = recursive == "recursive" || recursive == ""
   liftMT . liftMPD_ $ do
     when (action == Clear) M.clear
