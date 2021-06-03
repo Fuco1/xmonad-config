@@ -1,6 +1,6 @@
 -- Hey emacs, this is -*- haskell -*- file!
 Config { font = "xft:Monospace-8:narrow"
-       , lowerOnStart = False
+       , lowerOnStart = True
        , bgColor = "black"
        , fgColor = "#888a85"
        , position = Top
