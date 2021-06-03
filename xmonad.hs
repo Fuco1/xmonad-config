@@ -159,7 +159,7 @@ main = do
            , ("M4-S-<Return>", runInTerm "" "fish")
            , ("<XF86Sleep>", spawn "sudo pm-suspend")
            , ("<Print>" <%> "<Print>", withPrefixArgument $ \p -> do
-                 let prog = "/home/matus/bin/take-screenshot"
+                 let prog = "/home/matus/.local/bin/take-screenshot"
                  spawn $ prog ++ (if isPrefixRaw p then " noupload" else ""))
            , (leader <%> "<F1>" <%> "<F1>", spawn "xfce4-settings-manager")
            , (leader <%> "<F1>" <%> "<F2>", spawn "xfce4-appfinder")
