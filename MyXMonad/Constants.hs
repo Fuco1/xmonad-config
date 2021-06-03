@@ -15,6 +15,7 @@ import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks)
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Drawer
+import XMonad.Layout.Grid
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ResizeScreen
 import XMonad.Prompt
@@ -49,7 +50,7 @@ workspaceKeys = [xK_1 .. xK_9] ++ [xK_0, xK_q, xK_w, xK_e, xK_r]
 withWorkspacesD :: ButtonMask -> (WorkspaceId -> WindowSet -> WindowSet) -> [((ButtonMask, KeySym), X ())]
 withWorkspacesD = withWorkspaces MyXMonad.Constants.workspaces workspaceKeys
 
-layout = mixerdrawer `onBottom` as (Full ||| tiled ||| Mirror tiled)
+layout = mixerdrawer `onBottom` as (Full ||| tiled ||| Mirror tiled ||| Grid)
   where
     mixerdrawer = drawer 0 0.5
                   (foldl1 Or . map Resource $ ["alsamixer", "pacmixer"])
