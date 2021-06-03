@@ -80,6 +80,7 @@ doKillWindow = ask >>= \w -> liftX (killWindow w) >> doF (W.delete w)
 manageHook =
   composeOne [
       (stringProperty "WM_NAME" =? "Computers & Contacts" <&&> resource =? "TeamViewer.exe") -?> doKillWindow
+    , (stringProperty "WM_NAME" =? "Network Connections" <&&> className =? "Nm-connection-editor") -?> doFloat
     , isDialog -?> doCenterFloat
     , transience
     , isFullscreen -?> doFullFloat
