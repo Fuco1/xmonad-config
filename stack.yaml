@@ -1,4 +1,4 @@
-resolver: lts-12.18
+resolver: lts-18.14
 
 packages:
   - .
@@ -7,5 +7,6 @@ packages:
   - /home/matus/dev/haskell/mpris
 
 extra-deps:
-  - X11-1.8
+  - X11-1.10
   - X11-xft-0.3.1
+

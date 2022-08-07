@@ -10,12 +10,12 @@ import XMonad.Actions.Prefix
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.CycleWindows (cycleRecentWindows)
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP, ppOutput)
-import XMonad.Hooks.EwmhDesktops (ewmh, fullscreenEventHook)
-import XMonad.Hooks.ManageDocks (docksStartupHook, docksEventHook, ToggleStruts (..))
+import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
+import XMonad.Hooks.ManageDocks (docks, ToggleStruts (..))
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, NoUrgencyHook (..))
 import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
-import XMonad.Prompt.Window (windowPromptGoto)
+import XMonad.Prompt.Window (windowPrompt, WindowPrompt (Goto), allWindows)
 import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
 import XMonad.Util.ExtensibleState as XS
 import XMonad.Util.Run (spawnPipe, runInTerm, safeSpawn)
@@ -85,7 +85,8 @@ main = do
                   startupHook c
                   setWMName "LG3D" }) $
     withoutNetActiveWindow $
-    ewmh $
+    ewmhFullscreen $
+    docks $
     useDefaultPrefixArgument $
     withUrgencyHook NoUrgencyHook XMonad.def
            {
@@ -105,9 +106,8 @@ main = do
 
              manageHook         = C.manageHook
            , layoutHook         = C.layout
-           , startupHook        = docksStartupHook
            , logHook            = dynamicLogWithPP C.printer { ppOutput = hPutStrLn xmproc }
-           , handleEventHook    = propertyHook <+> fullscreenEventHook <+> docksEventHook
+           , handleEventHook    = propertyHook
            , modMask            = mod4Mask
            , borderWidth        = 1
            , terminal           = "urxvtc"
@@ -162,6 +162,7 @@ main = do
            , ("<Print>" <%> "<Print>", withPrefixArgument $ \p -> do
                  let prog = "/home/matus/.local/bin/take-screenshot"
                  spawn $ prog ++ (if isPrefixRaw p then " noupload" else ""))
+           , ("<Print>" <%> "f", spawn "flameshot gui")
            , (leader <%> "<F1>" <%> "<F1>", spawn "xfce4-settings-manager")
            , (leader <%> "<F1>" <%> "<F2>", spawn "xfce4-appfinder")
              -- create a submap for these
@@ -179,7 +180,7 @@ main = do
            , ("M2-<Pause>", recompileXMonad)
            , ("M2-p", runOrRaisePrompt C.prompt)
            , ("M2-l", spawn "xscreensaver-command -lock")
-           , (leader <%> leader, windowPromptGoto C.prompt)
+           , (leader <%> leader, windowPrompt C.prompt Goto allWindows)
            , ("M2-c", kill)
            , ("M2-m", withScreen left W.view)
            , ("M2-,", withScreen middle W.view)
