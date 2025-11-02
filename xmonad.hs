@@ -1,4 +1,5 @@
 import Control.Monad (when)
+import qualified Data.Map as M (toList, lookup)
 import Data.Monoid (All(..))
 import Data.Foldable (forM_)
 import DBus.Mpris
@@ -61,6 +62,18 @@ propertyHook e = do
         forM_ dat Mpris.resetCurrent
     _ -> return ()
   return (All True)
+
+openGoogleInNewTab :: X ()
+openGoogleInNewTab = do
+  wm <- allWindows
+  let chromeName = filter (subseq "Google Chrome") . map fst . M.toList $ wm
+  case chromeName of
+    (winName:_) -> case M.lookup winName wm of
+      Just w -> do
+        spawn "google-chrome \" \""
+        windows (W.focusWindow w)
+      Nothing -> return ()
+    _ -> return ()
 
 main :: IO ()
 main = do
@@ -181,6 +194,7 @@ main = do
            , ("M2-p", runOrRaisePrompt C.prompt)
            , ("M2-l", spawn "xscreensaver-command -lock")
            , (leader <%> leader, windowPrompt C.prompt Goto allWindows)
+           , ("M2-t", openGoogleInNewTab)
            , ("M2-c", kill)
            , ("M2-m", withScreen left W.view)
            , ("M2-,", withScreen middle W.view)
